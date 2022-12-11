@@ -13,7 +13,7 @@ class Monkey:
     def throw_items(self):
         for old in self.items:
             new = eval(self.operation)
-            new = new // 3
+            # new = new // 3
             monkeys[self.true_monkey if (new % self.test == 0) else self.false_monkey].items.append(new)
             self.inspect_count += 1
         self.items = []
