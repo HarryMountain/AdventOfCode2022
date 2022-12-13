@@ -1,5 +1,6 @@
 use_test = False
 monkeys = []
+from math import lcm
 
 class Monkey:
     def __init__(self, items, operation, test, true_monkey, false_monkey):
@@ -10,10 +11,10 @@ class Monkey:
         self.false_monkey = false_monkey
         self.inspect_count = 0
 
-    def throw_items(self):
+    def throw_items(self, lcm):
         for old in self.items:
             new = eval(self.operation)
-            # new = new // 3
+            new %= lcm
             monkeys[self.true_monkey if (new % self.test == 0) else self.false_monkey].items.append(new)
             self.inspect_count += 1
         self.items = []
@@ -41,9 +42,10 @@ with open('../test_input_files/day11test.txt' if use_test else '../input_files/d
                     else:
                         false_monkey = int(line[1].split()[3])
                         monkeys.append(Monkey(starting, operation, test, true_monkey, false_monkey))
-for i in range(10):
+monkey_lcm = lcm(*[x.test for x in monkeys])
+for i in range(10000):
     for monkey in monkeys:
-        monkey.throw_items()
+        monkey.throw_items(monkey_lcm)
     inspect_counts = [m.inspect_count for m in monkeys]
 inspect_counts = sorted(inspect_counts, reverse=True)
 print(inspect_counts[0] * inspect_counts[1])
