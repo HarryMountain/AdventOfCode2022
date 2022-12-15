@@ -34,20 +34,30 @@ def check_order(left, right):
 
 
 
-pair = []
-total = 0
-index = 1
+all_packets = []
 with open('../test_input_files/day13test.txt' if test else '../input_files/day13input.txt','r') as f:
     for line in f:
         line = line.rstrip()
         if line != '':
             if not line.isdigit():
                 line = ast.literal_eval(line)
-            pair.append(line)
-            if len(pair) == 2:
-                if check_order(pair[0], pair[1]):
-                    total += index
-                    print(index)
-                index += 1
-                pair = []
+            all_packets.append(line)
+
+n = len(all_packets)
+swapped = False
+for i in range(n - 1):
+    for j in range(0, n - i - 1):
+        if not check_order(all_packets[j], all_packets[j + 1]):
+            swapped = True
+            all_packets[j], all_packets[j + 1] = all_packets[j + 1], all_packets[j]
+    if not swapped:
+        break
+print(all_packets)
+
+total = 1
+for i in range(len(all_packets)):
+    if all_packets[i] == [[2]]:
+        total *= i + 1
+    elif all_packets[i] == [[6]]:
+        total *= i + 1
 print(total)
